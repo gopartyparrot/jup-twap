@@ -1,0 +1,25 @@
+{
+  "name": "@parrotfi/jup-twap",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "bin": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "prebuild": "rimraf ./lib",
+    "build": "tsc",
+    "publish": "npm publish --access public",
+    "start": "node lib/index.js"
+  },
+  "dependencies": {
+    "@icholy/duration": "5.1.0",
+    "@jup-ag/core": "0.0.0-alpha.6",
+    "commander": "8.3.0",
+    "dotenv": "10.0.0",
+    "winston": "3.3.3"
+  },
+  "devDependencies": {
+    "ts-node": "10.4.0",
+    "typescript": "4.5.2"
+  }
+}
