@@ -1,5 +1,6 @@
 import { Jupiter } from "@jup-ag/core";
 import { PublicKey } from "@solana/web3.js";
+
 import { connection, wallet } from "../connection";
 import { TOKENS } from "../constants";
 
@@ -38,7 +39,7 @@ export async function swapCommand({
     });
     const routeMap = jupiter.getRouteMap();
     const possiblePairs = routeMap.get(fromToken.mint);
-    if (!possiblePairs.filter((i) => i === toToken.mint).length) {
+    if (!possiblePairs?.filter((i) => i === toToken.mint).length) {
       throw new Error(`could not find routing for ${from}`);
     }
   }
@@ -58,6 +59,10 @@ export async function swapCommand({
     slippage
   );
 
+  if (!routes?.length) {
+    throw new Error("route not found");
+  }
+
   // Prepare execute exchange
   const { execute } = await jupiter.exchange({
     route: routes[0],
@@ -70,5 +75,5 @@ export async function swapCommand({
     throw new Error(`swap result error: ${swapResult}`);
   }
 
-  return swapResult["txid"];
+  return (swapResult as any)["txid"];
 }

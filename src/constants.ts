@@ -1,10 +1,16 @@
 export const ENV = {
-  channel: process.env.CHANNEL,
-  rpcURL: process.env.RPC_URL,
-  walletPK: process.env.WALLET_PK,
+  rpcURL: process.env.RPC_URL ?? "",
+  walletPK: process.env.WALLET_PK ?? "",
 };
 
-export const TOKENS = {
+interface TokenInfo {
+  name: string;
+  mint: string;
+  symbol: string;
+  decimals: number;
+}
+
+export const TOKENS: Record<string, TokenInfo> = {
   SOL: {
     name: "Solana",
     mint: "So11111111111111111111111111111111111111112",

@@ -3,14 +3,14 @@ import Duration from "@icholy/duration";
 import { Command } from "commander";
 
 import { swapCommand } from "./commands/swap";
-import { logger } from "./logger";
 import { wallet } from "./connection";
+import { logger } from "./logger";
 
 const cli = new Command();
 
 cli.version("1.0.0");
 
-const cmd = cli
+cli
   .command("twap")
   .description("swap")
   .requiredOption("--interval <interval>")
