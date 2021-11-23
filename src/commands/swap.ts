@@ -105,7 +105,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
         logger.info(
           `current price ${currentPrice} is greater than ${args.priceThreshold}, skip swap for now`
         );
-        throw new Error("price threshold for swap not reached");
+        return "";
       }
     } catch (error) {
       logger.error(`price threshold check error: ${error}`);

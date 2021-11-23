@@ -34,7 +34,6 @@ cli
       priceThreshold?: string;
       dryRun: boolean;
     }) => {
-      const dur = new Duration(options.interval);
       logger.info(`using wallet ${wallet.publicKey}`);
 
       logger.info(`update tokens accounts...`);
@@ -44,9 +43,10 @@ cli
       );
 
       logger.info(
-        `twap swap of ${options.amount} from ${options.from} to ${options.to} every ${options.interval}`
+        `twap swap of ${options.amount} from ${options.from} to ${options.to} every ${options.interval} ready`
       );
-      setInterval(async () => {
+
+      const runSwap = () => {
         logger.info(`Swap starting...`);
         swapCommand(options)
           .then((txid) => {
@@ -55,7 +55,11 @@ cli
           .catch((error) => {
             logger.error(`Swap failed: ${error}`);
           });
-      }, dur.milliseconds());
+      };
+
+      // Do a first swap at start-up
+      runSwap();
+      setInterval(runSwap, new Duration(options.interval).milliseconds());
     }
   );
 
