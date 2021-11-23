@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { swapCommand } from "./swap";
 
 describe("Swap some USDC for PRT", () => {

@@ -25,8 +25,46 @@ and then
 yarn start
 ```
 
-#### Swap 10 USDC for PRT every 10 minutes
+#### Twap Swap
+
+The required arguments are `From`, `To`, `Amount` and `Interval`. 
+
+- From and To: are the order of the trading pair we want to swap.
+- Amount: is the `From token` amount we will swap for the `To token`.
+- Interval: is the interval in duration (like 10s, 10m, 10h) to execute a swap
+
+Example:
 
 ```sh
-yarn start twap --from USDC --to PRT --amount 10 --interval 10m
+yarn start twap --from USDC --to PRT --amount 100 --interval 10m
 ```
+
+> It will buy 100 USDC worth of PRT every 10 minutes
+
+### Transfer amount
+
+Optional you can specify a `TransferAddress` and `TransferThreshold` with the arguments  `--transferAddress` and `--transferThreshold` respectively. 
+
+When the balance of the buying asset reach the `TransferThreshold`, all it's balance will be transfer to the `TransferAddress` associated token account.
+
+Example:
+
+```sh
+yarn start twap --from USDC --to PRT --amount 100 --interval 10m --transferThreshold 100000 --transferAddress FRnCC8dBCcRabRv8xNbR5WHiGPGxdphjiRhE2qJZvwpm
+```
+
+> It will buy 100 USDC worth of PRT every 10 minutes and it will transfer to the Parrot Protocol address all the PRT balance once greater than 100,000 PRT
+
+### Price Threshold
+
+Optional you can specify a swap `PriceThreshold` with the argument `--priceThreshold`.
+
+When CoinGecko price for the `To token` goes below the `PriceThreshold`, the swap will be execute otherwise it will skip and wait for the next interval.
+
+Example:
+
+```sh
+yarn start twap --from USDC --to PRT --amount 100 --interval 10m --priceThreshold 0.015
+```
+
+> It will buy 100 USDC worth of PRT every 10 minutes only if PRT price on CoinGecko goes below 0.015.

@@ -8,6 +8,7 @@ interface TokenInfo {
   mint: string;
   symbol: string;
   decimals: number;
+  coinGeckoID?: string;
 }
 
 export const TOKENS: Record<string, TokenInfo> = {
@@ -23,16 +24,11 @@ export const TOKENS: Record<string, TokenInfo> = {
     symbol: "USDC",
     decimals: 6,
   },
-  PAI: {
-    name: "PAI",
-    mint: "Ea5SjE2Y6yvCeW5dYTn7PYMuW5ikXkvbGdcmSnXeaLjS",
-    symbol: "PAI",
-    decimals: 6,
-  },
   PRT: {
     name: "PRT",
     mint: "PRT88RkA4Kg5z7pKnezeNH4mafTvtQdfFgpQTGRjz44",
     symbol: "PRT",
     decimals: 6,
+    coinGeckoID: "parrot-protocol",
   },
 };
