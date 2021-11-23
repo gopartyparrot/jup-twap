@@ -29,9 +29,9 @@ yarn start
 
 The required arguments are `From`, `To`, `Amount` and `Interval`. 
 
-- From and To: are the order of the trading pair we want to swap.
-- Amount: is the `From token` amount we will swap for the `To token`.
-- Interval: is the interval in duration (like 10s, 10m, 10h) to execute a swap
+- From and To: are the direction of the trading pair we want to swap.
+- Amount: is the `From token` amount we want to swap for the `To token`.
+- Interval: is the duration (like 10s, 10m, 10h) interval to execute a swap.
 
 Example:
 
@@ -53,7 +53,7 @@ Example:
 yarn start twap --from USDC --to PRT --amount 100 --interval 10m --transferThreshold 100000 --transferAddress FRnCC8dBCcRabRv8xNbR5WHiGPGxdphjiRhE2qJZvwpm
 ```
 
-> It will buy 100 USDC worth of PRT every 10 minutes and it will transfer to the Parrot Protocol address all the PRT balance once greater than 100,000 PRT
+> It will buy 100 USDC worth of PRT every 10 minutes and it will transfer all the PRT balance to the Parrot Protocol address once greater than 100,000 PRT
 
 ### Price Threshold
 

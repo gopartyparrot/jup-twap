@@ -1,7 +1,7 @@
 import { TokenInstructions } from "@project-serum/serum";
 import { PublicKey } from "@solana/web3.js";
-import { wallet } from "./connection";
-import { sendTransaction } from "./utils/sendTransaction";
+import { wallet } from "../connection";
+import { sendTransaction } from "./sendTransaction";
 
 export async function transferToken(
   fromTokenAccount: PublicKey,

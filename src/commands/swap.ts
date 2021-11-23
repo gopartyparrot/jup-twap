@@ -11,7 +11,7 @@ import { getTokenPrice } from "../coingecko";
 import { connection, wallet } from "../connection";
 import { TOKENS } from "../constants";
 import { logger } from "../logger";
-import { transferToken } from "../spl";
+import { transferToken } from "../utils/transferToken";
 
 interface SwapArgs {
   from: string;
@@ -81,7 +81,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
       transferTokenAccounts[toToken.mint] = transferTokenAccount;
     }
     logger.info(
-      `transfer threshold reached, transfer ${
+      `transfer threshold reached, transferring ${
         toToken.symbol
       } (${toBalance}) to ${transferTokenAccount.toBase58()}`
     );
@@ -91,7 +91,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
         transferTokenAccount,
         toBalance
       );
-      logger.info(`transfer balance txID: ${res.txId}`);
+      logger.info(`transfer balance success: ${res.txId}`);
     } catch (error) {
       logger.error(`transfer balance error: ${error}`);
     }
@@ -108,7 +108,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
         return "";
       }
     } catch (error) {
-      logger.error(`price threshold check error: ${error}`);
+      throw new Error(`price threshold check error: ${error}`);
     }
   }
 
@@ -122,7 +122,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
     const routeMap = jupiter.getRouteMap();
     const possiblePairs = routeMap.get(fromToken.mint);
     if (!possiblePairs?.filter((i) => i === toToken.mint).length) {
-      throw new Error(`could not find routing for ${args.from}`);
+      throw new Error(`could not find route map for ${args.from}-${args.to}`);
     }
   }
 
@@ -136,7 +136,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
   );
 
   if (!routes?.length) {
-    throw new Error("route not found");
+    throw new Error(`could not find route for ${args.from}-${args.to}`);
   }
 
   // Prepare execute exchange

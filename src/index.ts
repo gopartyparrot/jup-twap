@@ -47,13 +47,15 @@ cli
       );
 
       const runSwap = () => {
-        logger.info(`Swap starting...`);
+        logger.info(`swap starting...`);
         swapCommand(options)
-          .then((txid) => {
-            logger.info(`Swap success: ${txid}`);
+          .then((txId) => {
+            if (txId) {
+              logger.info(`swap success: ${txId}`);
+            }
           })
           .catch((error) => {
-            logger.error(`Swap failed: ${error}`);
+            logger.error(`swap failed: ${error}`);
           });
       };
 

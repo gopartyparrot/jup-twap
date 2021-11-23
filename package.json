@@ -1,14 +1,14 @@
 {
   "name": "@parrotfi/jup-twap",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "license": "MIT",
   "main": "src/index.ts",
   "bin": "lib/index.js",
-  "license": "MIT",
   "scripts": {
     "dev": "ts-node src/index.ts",
     "prebuild": "rimraf ./lib",
     "build": "tsc",
-    "publish": "npm publish --access public",
+    "pub": "npm publish --access public",
     "test": "jest",
     "start": "node lib/index.js"
   },

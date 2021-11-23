@@ -1,13 +1,13 @@
 import { Transaction, TransactionInstruction, Keypair } from "@solana/web3.js";
 import { connection, wallet } from "../connection";
 
-export const sendTransaction = async (
+export async function sendTransaction(
   instructions: TransactionInstruction[],
   cleanUpInstructions: TransactionInstruction[],
   signers: Keypair[],
   skipPreflight = true,
   simulate = false
-) => {
+) {
   let txId = "";
   const transaction = new Transaction();
   try {
@@ -39,4 +39,4 @@ export const sendTransaction = async (
     throw error;
   }
   return { txId, transaction };
-};
+}
