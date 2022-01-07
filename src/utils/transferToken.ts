@@ -1,6 +1,6 @@
 import { TokenInstructions } from "@project-serum/serum";
 import { PublicKey } from "@solana/web3.js";
-import { wallet } from "../connection";
+import { keypair } from "../connection";
 import { sendTransaction } from "./sendTransaction";
 
 export async function transferToken(
@@ -14,10 +14,10 @@ export async function transferToken(
         source: fromTokenAccount,
         destination: toTokenAccount,
         amount: amount,
-        owner: wallet.publicKey,
+        owner: keypair.publicKey,
       }),
     ],
     [],
-    [wallet.payer]
+    [keypair]
   );
 }

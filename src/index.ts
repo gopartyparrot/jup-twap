@@ -3,10 +3,10 @@ import Duration from "@icholy/duration";
 import { Command } from "commander";
 
 import { swapCommand } from "./commands/swap";
-import { wallet } from "./connection";
 import { logger } from "./logger";
 import { updateTokenAccounts } from "./accounts";
 import { TOKENS } from "./constants";
+import { keypair } from "./connection";
 
 const cli = new Command();
 
@@ -34,11 +34,11 @@ cli
       priceThreshold?: string;
       dryRun: boolean;
     }) => {
-      logger.info(`using wallet ${wallet.publicKey}`);
+      logger.info(`using wallet ${keypair.publicKey}`);
 
       logger.info(`update tokens accounts...`);
       await updateTokenAccounts(
-        wallet.publicKey,
+        keypair.publicKey,
         Object.values(TOKENS).map((i) => i.mint)
       );
 

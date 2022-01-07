@@ -1,4 +1,4 @@
-import { Jupiter } from "@jup-ag/core";
+import { Jupiter, TOKEN_LIST_URL } from "@jup-ag/core";
 import { PublicKey } from "@solana/web3.js";
 import {
   getTokenAccountAddress,
@@ -8,7 +8,7 @@ import {
 } from "../accounts";
 import { getTokenPrice } from "../coingecko";
 
-import { connection, wallet } from "../connection";
+import { connection, keypair } from "../connection";
 import { TOKENS } from "../constants";
 import { logger } from "../logger";
 import { transferToken } from "../utils/transferToken";
@@ -58,11 +58,11 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
   }
 
   // Check from balance
-  if (!fromBalance || fromBalance < swapAmount) {
-    throw new Error(
-      `from balance not enough for swap, need ${swapAmount} ${fromToken.symbol} only have ${fromBalance} ${fromToken.symbol}`
-    );
-  }
+  // if (!fromBalance || fromBalance < swapAmount) {
+  //   throw new Error(
+  //     `from balance not enough for swap, need ${swapAmount} ${fromToken.symbol} only have ${fromBalance} ${fromToken.symbol}`
+  //   );
+  // }
 
   // Check transfer balance
   if (
@@ -117,7 +117,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
     jupiter = await Jupiter.load({
       connection,
       cluster: "mainnet-beta",
-      user: wallet.payer,
+      user: keypair,
     });
     const routeMap = jupiter.getRouteMap();
     const possiblePairs = routeMap.get(fromToken.mint);
@@ -135,21 +135,21 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
     args.slippage ?? 2
   );
 
-  if (!routes?.length) {
+  if (!routes?.routesInfos?.length) {
     throw new Error(`could not find route for ${args.from}-${args.to}`);
   }
 
   // Prepare execute exchange
   const { execute } = await jupiter.exchange({
-    route: routes[0],
+    route: routes.routesInfos[0],
   });
 
   // Swap execute
-  const swapResult = await execute();
+  const swapResult: any = await execute();
 
-  if (Object.keys(swapResult).includes("error")) {
+  if (swapResult.error) {
     throw new Error(`swap result error: ${swapResult}`);
   }
 
-  return (swapResult as any)["txid"];
+  return swapResult.txid;
 }

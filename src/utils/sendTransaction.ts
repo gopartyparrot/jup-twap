@@ -1,5 +1,5 @@
 import { Transaction, TransactionInstruction, Keypair } from "@solana/web3.js";
-import { connection, wallet } from "../connection";
+import { connection, keypair } from "../connection";
 
 export async function sendTransaction(
   instructions: TransactionInstruction[],
@@ -13,12 +13,12 @@ export async function sendTransaction(
   try {
     transaction.add(...instructions, ...cleanUpInstructions);
 
-    transaction.feePayer = wallet.publicKey;
+    transaction.feePayer = keypair.publicKey;
     transaction.recentBlockhash = (
       await connection.getRecentBlockhash()
     ).blockhash;
 
-    await wallet.signTransaction(transaction);
+    await connection.sendTransaction(transaction, [keypair]);
     signers
       .filter((s) => s !== undefined)
       .forEach((kp) => {
