@@ -58,11 +58,11 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
   }
 
   // Check from balance
-  // if (!fromBalance || fromBalance < swapAmount) {
-  //   throw new Error(
-  //     `from balance not enough for swap, need ${swapAmount} ${fromToken.symbol} only have ${fromBalance} ${fromToken.symbol}`
-  //   );
-  // }
+  if (!fromBalance || fromBalance < swapAmount) {
+    throw new Error(
+      `from balance not enough for swap, need ${swapAmount} ${fromToken.symbol} only have ${fromBalance} ${fromToken.symbol}`
+    );
+  }
 
   // Check transfer balance
   if (
