@@ -22,6 +22,7 @@ cli
   .option("--transferAddress <transferAddress>")
   .option("--transferThreshold <transferThreshold>")
   .option("--priceThreshold <priceThreshold>")
+  .option("--onlyDirectRoutes", "swap without any intermediary paths", true)
   .option("--dryRun", "dry run", false)
   .action(
     async (options: {
@@ -33,6 +34,7 @@ cli
       transferThreshold?: string;
       priceThreshold?: string;
       dryRun: boolean;
+      onlyDirectRoutes: boolean,
     }) => {
       logger.info(`using wallet ${keypair.publicKey}`);
 
