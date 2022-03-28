@@ -21,6 +21,7 @@ interface SwapArgs {
   transferThreshold?: string;
   priceThreshold?: string;
   slippage?: number;
+  onlyDirectRoutes?: boolean;
 }
 
 let jupiter: Jupiter;
@@ -81,8 +82,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
       transferTokenAccounts[toToken.mint] = transferTokenAccount;
     }
     logger.info(
-      `transfer threshold reached, transferring ${
-        toToken.symbol
+      `transfer threshold reached, transferring ${toToken.symbol
       } (${toBalance}) to ${transferTokenAccount.toBase58()}`
     );
     try {
@@ -114,26 +114,31 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
 
   // load Jupiter once for this from/to pair
   if (!jupiter) {
+
     jupiter = await Jupiter.load({
       connection,
       cluster: "mainnet-beta",
       user: keypair,
     });
+
     const routeMap = jupiter.getRouteMap();
+
     const possiblePairs = routeMap.get(fromToken.mint);
     if (!possiblePairs?.filter((i) => i === toToken.mint).length) {
       throw new Error(`could not find route map for ${args.from}-${args.to}`);
     }
+
   }
 
   // Calculate routes for swapping [amount] [from] to [to] with 2% slippage
   // routes are sorted based on outputAmount, so ideally the first route is the best.
-  const routes = await jupiter.computeRoutes(
-    new PublicKey(fromToken.mint),
-    new PublicKey(toToken.mint),
-    swapAmount,
-    args.slippage ?? 2
-  );
+  const routes = await jupiter.computeRoutes({
+    inputMint: new PublicKey(fromToken.mint),
+    outputMint: new PublicKey(toToken.mint),
+    inputAmount: swapAmount,
+    slippage: args.slippage ?? 2,
+    onlyDirectRoutes: args.onlyDirectRoutes ?? true,
+  });
 
   if (!routes?.routesInfos?.length) {
     throw new Error(`could not find route for ${args.from}-${args.to}`);
@@ -141,7 +146,7 @@ export async function swapCommand(args: SwapArgs): Promise<string> {
 
   // Prepare execute exchange
   const { execute } = await jupiter.exchange({
-    route: routes.routesInfos[0],
+    routeInfo: routes.routesInfos[0],
   });
 
   // Swap execute
